@@ -10,6 +10,7 @@ Usage:
     python3 main.py --edge-cases --latex
     python3 main.py --generate -o runs.json
     python3 main.py --evaluate runs.json --latex
+    python3 main.py --profile runs.json --index 12 207
     python3 main.py --TOOL --help
 """
 
@@ -21,6 +22,7 @@ TOOLS = {
     "--edge-cases": ("scoring.cli.edge_cases", "check the edge-case pairs against all three models"),
     "--generate": ("scoring.cli.generate", "generate synthetic runs for the 32 archetypes"),
     "--evaluate": ("scoring.cli.evaluate", "evaluate the models on a generated dataset"),
+    "--profile": ("scoring.cli.profile", "compare two runs' composite scores and spider charts"),
 }
 
 
