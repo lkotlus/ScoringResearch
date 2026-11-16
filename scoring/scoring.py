@@ -23,21 +23,13 @@ Run format (one run; a runs file is a list of these, or {"runs": [...]}):
       ],
       "violations": [{"t": 30.0, "rule": "no-dos"}]
     }
-
-Usage:
-    python scoring.py runs.json -o scores.json
-    python scoring.py --selftest
 """
 
-import argparse
-import json
 import math
-import sys
-from pathlib import Path
 
 from scoring.helpers.fields import fields_norm
 from scoring.models.testbed import Finding, Testbed, Params
-from scoring.constants import COMPONENTS, DEFAULT_FINDINGS, DEFAULT_ROE
+from scoring.constants import COMPONENTS
 
 
 def finding_credit(f: Finding, sub: dict) -> float:

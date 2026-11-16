@@ -1,5 +1,9 @@
 """
 CLI to actually use the damn tools.
+
+Usage:
+    python3 main.py runs.json -o scores.json
+    python3 main.py --selftest
 """
 
 import argparse

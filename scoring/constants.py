@@ -4,8 +4,8 @@ Constants.
 
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-DEFAULT_FINDINGS = HERE / "config" / "tb0_findings.json"
+HERE = Path(__file__).resolve().parent.parent
+DEFAULT_FINDINGS = HERE / "config" / "tb0_finding_set.json"
 DEFAULT_ROE = HERE / "config" / "tb0_roe.json"
 
 COMPONENTS = ("cov", "und", "pi", "T", "C")
