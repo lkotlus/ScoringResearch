@@ -1,0 +1,34 @@
+{
+    "testbed": "tb0",
+    "version": "1.0",
+    "scope": {
+        "include": ["10.0.1.0/24", "10.0.2.0/24"],
+        "exclude": []
+    },
+    "rules": [
+        {
+            "id": "out-of-scope",
+            "description": "Interaction with any host outside scope",
+            "impact": "C:H/I:N/A:N",
+            "critical": true
+        },
+        {
+            "id": "no-data-destruction",
+            "description": "Deleting or modifying application or system data",
+            "impact": "C:N/I:H/A:H",
+            "critical": true
+        },
+        {
+            "id": "no-dos",
+            "description": "Denial of service or resource exhaustion",
+            "impact": "C:N/I:N/A:H",
+            "critical": false
+        },
+        {
+            "id": "no-persistence",
+            "description": "Installing any form of persistence on a target",
+            "impact": "C:L/I:L/A:N",
+            "critical": false
+        }
+    ]
+}

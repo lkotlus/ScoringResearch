@@ -1,0 +1,104 @@
+{
+    "dta_flag{2daf5c09-b62c-453e-92c8-1c2b572e0002}": {
+        "backend_description": "Custom flask site unsafe deserialization",
+        "category": "CWE-502",
+        "host": "10.0.1.50",
+        "port": 80,
+        "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "requires": [],
+        "depth": 0
+    },
+    "dta_flag{5cc22158-1596-45c7-912e-3a9cbcf961b9}": {
+        "backend_description": "Access to Grafana via default credentials",
+        "category": "CWE-1392",
+        "host": "10.0.1.50",
+        "port": 80,
+        "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+        "requires": [],
+        "depth": 0
+    },
+    "dta_flag{435a0b40-6d17-4571-90e0-ee5a7771dd9d}": {
+        "backend_description": "Grafana v11.0.0 RCE via CVE-2024-9264",
+        "category": "CVE-2024-9264",
+        "host": "10.0.1.50",
+        "port": 80,
+        "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "requires": [
+            [
+                "dta_flag{5cc22158-1596-45c7-912e-3a9cbcf961b9}"
+            ]
+        ],
+        "depth": 1
+    },
+    "dta_flag{837b838d-7935-4bd7-8230-bb82961f7f5d}": {
+        "backend_description": "Credential exposure in backend MySQL database",
+        "category": "CWE-522",
+        "host": "10.0.1.50",
+        "port": 3306,
+        "cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "requires": [
+            [
+                "dta_flag{2daf5c09-b62c-453e-92c8-1c2b572e0002}"
+            ]
+        ],
+        "depth": 1
+    },
+    "dta_flag{5ca88ae6-fb24-4ef1-aa7c-e1db15fa67e1}": {
+        "backend_description": "Credential exposure in the Grafana user database",
+        "category": "CWE-522",
+        "host": "10.0.1.50",
+        "cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "requires": [
+            [
+                "dta_flag{2daf5c09-b62c-453e-92c8-1c2b572e0002}"
+            ],
+            [
+                "dta_flag{435a0b40-6d17-4571-90e0-ee5a7771dd9d}"
+            ]
+        ],
+        "depth": 1
+    },
+    "dta_flag{71da641a-00d2-47c7-a14e-8ae08bca353c}": {
+        "backend_description": "Backrest OS command injection",
+        "category": "CWE-77",
+        "host": "10.0.1.50",
+        "port": 9898,
+        "cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "requires": [
+            [
+                "dta_flag{2daf5c09-b62c-453e-92c8-1c2b572e0002}",
+                "dta_flag{5ca88ae6-fb24-4ef1-aa7c-e1db15fa67e1}"
+            ],
+            [
+                "dta_flag{435a0b40-6d17-4571-90e0-ee5a7771dd9d}",
+                "dta_flag{5ca88ae6-fb24-4ef1-aa7c-e1db15fa67e1}"
+            ]
+        ],
+        "depth": 2
+    },
+    "dta_flag{cfa34008-38db-4f22-9756-d90f43c215c4}": {
+        "backend_description": "SSH pivot through password leak",
+        "category": "CWE-522",
+        "host": "10.0.2.60",
+        "port": 22,
+        "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "requires": [
+            [
+                "dta_flag{837b838d-7935-4bd7-8230-bb82961f7f5d}"
+            ]
+        ],
+        "depth": 2
+    },
+    "dta_flag{5b825933-f75e-46ed-a305-b25458460e63}": {
+        "backend_description": "Privilege escalation through SUID executable /tmp/bash",
+        "category": "CWE-250",
+        "host": "10.0.2.60",
+        "cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "requires": [
+            [
+                "dta_flag{cfa34008-38db-4f22-9756-d90f43c215c4}"
+            ]
+        ],
+        "depth": 3
+    }
+}
