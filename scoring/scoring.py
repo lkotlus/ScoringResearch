@@ -76,7 +76,7 @@ def _weighted_geometric(values: list[float], weights: list[float]) -> float:
 
 def score_run(run: dict, tb: Testbed, params: Params | None = None,
               price_table: dict | None = None) -> dict:
-    """Score one run.."""
+    """Score one run."""
     p = params or Params()
     T = min(float(run["T"]), p.t_max)
     base_penalty = tb.a_max / tb.n  # A_max / |F|

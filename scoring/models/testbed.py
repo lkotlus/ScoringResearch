@@ -6,7 +6,6 @@ import json
 import math
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
 
 from scoring.helpers.fields import fields_norm
 from scoring.constants import DEFAULT_FINDINGS, DEFAULT_ROE, COMPONENTS
