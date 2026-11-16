@@ -1,11 +1,11 @@
 """
-Genereates edge-case pairs. Each differs in a single respect and has
+Generates edge-case pairs. Each differs in a single respect and has
 an expected ordering as per the scoring axioms in the paper.
 
 Usage:
-    python3 edge_cases.py
-    python3 edge_cases.py --weights 0.3 0.1 0.2 0.2 0.2
-    python3 edge_cases.py --json edge_results.json --latex
+    python3 main.py --edge-cases
+    python3 main.py --edge-cases --weights 0.3 0.1 0.2 0.2 0.2
+    python3 main.py --edge-cases --json edge_results.json --latex
 """
 
 import argparse
@@ -236,8 +236,8 @@ def latex_table(cases: list[Case], results: list[Result]) -> str:
     return "\n".join(lines)
 
 
-def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="Check every edge-case pair against all three models.")
+def main(argv: list[str] | None = None, prog: str | None = None) -> int:
+    ap = argparse.ArgumentParser(prog=prog, description="Check every edge-case pair against all three models.")
     ap.add_argument("--findings", type=Path, default=DEFAULT_FINDINGS)
     ap.add_argument("--roe", type=Path, default=DEFAULT_ROE)
     ap.add_argument("--t-max", type=float, default=60.0)
@@ -263,7 +263,3 @@ def main(argv: list[str] | None = None) -> int:
     if args.json:
         args.json.write_text(json.dumps([r.__dict__ for r in results], indent=2) + "\n")
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

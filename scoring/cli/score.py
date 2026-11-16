@@ -1,9 +1,9 @@
 """
-CLI to actually use the damn tools.
+Score a file of runs with all three composite models.
 
 Usage:
-    python3 main.py runs.json -o scores.json
-    python3 main.py --selftest
+    python3 main.py --scoring runs.json -o scores.json
+    python3 main.py --scoring --selftest
 """
 
 import argparse
@@ -20,8 +20,8 @@ def _load_runs(path: Path) -> list[dict]:
     return data["runs"] if isinstance(data, dict) else data
 
 
-def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0]) # type: ignore
+def main(argv: list[str] | None = None, prog: str | None = None) -> int:
+    ap = argparse.ArgumentParser(prog=prog, description=__doc__.strip().split("\n\n")[0]) # type: ignore
     ap.add_argument("runs", nargs="?", type=Path, help="runs JSON file")
     ap.add_argument("-o", "--output", type=Path, help="write scores JSON here (default: stdout)")
     ap.add_argument("--findings", type=Path, default=DEFAULT_FINDINGS)
@@ -57,7 +57,3 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(out)
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
