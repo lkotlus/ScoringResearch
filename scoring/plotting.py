@@ -10,11 +10,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
+from matplotlib.offsetbox import AnnotationBbox, HPacker, TextArea, VPacker
 
 from scoring.constants import COMPONENTS
 
 LABELS = {"cov": "Coverage", "und": "Understanding", "pi": "Integrity",
-          "T": "Time eff.", "C": "Cost eff."}
+          "T": "Time", "C": "Cost"}
 SCORE_LABELS = (("sum", "Weighted sum"), ("geo", "Geometric"), ("auc", "AUC"))
 
 # Reference palette, light mode: categorical blue (slot 1) and red (slot 8),
@@ -24,7 +25,25 @@ TEXT = "#0b0b0b"
 TEXT_SECONDARY = "#52514e"
 GRID = "#d9d8d4"
 SERIES = (("A", "#2a78d6", "-"), ("B", "#e34948", "--"))  # name, color, line style
+SERIES_TEXT = {"A": "#1f62b5", "B": "#c43535"}
 
+def _axis_label(ax, angle: float, name: str, value_a: float, value_b: float) -> None:
+    """Component name over 'A / B' values, colored by run, just outside the chart."""
+    def text(value: str, color: str) -> TextArea:
+        return TextArea(value, textprops={"color": color, "fontsize": 8.5})
+
+    side, up = math.sin(angle), math.cos(angle)  # axes run clockwise from the top
+    align = "left" if side > 0.1 else "right" if side < -0.1 else "center"
+    values = HPacker(children=[text(f"{value_a:.2f}", SERIES_TEXT["A"]),
+                               text(" / ", TEXT_SECONDARY),
+                               text(f"{value_b:.2f}", SERIES_TEXT["B"])], pad=0, sep=0)
+    box = VPacker(children=[text(name, TEXT), values], align=align, pad=0, sep=2)
+    box_x = {"left": 0.0, "right": 1.0, "center": 0.5}[align]
+    box_y = 0.0 if up > 0.9 else 1.0 if up < -0.9 else 0.5
+    ax.add_artist(AnnotationBbox(box, (angle, 1.0), xycoords="data",
+                                 xybox=(10 * side, 10 * up), boxcoords="offset points",
+                                 box_alignment=(box_x, box_y), frameon=False,
+                                 annotation_clip=False))
 
 def comparison_figure(a: dict, b: dict, normalized: bool = False) -> Figure:
     """Spider chart of two scored runs (A in blue, B in red) beside their scores.
@@ -37,8 +56,8 @@ def comparison_figure(a: dict, b: dict, normalized: bool = False) -> Figure:
     angles = [2 * math.pi * k / len(COMPONENTS) for k in range(len(COMPONENTS))]
     closed_angles = angles + angles[:1]
 
-    fig = plt.figure(figsize=(8.0, 4.4), facecolor=SURFACE)
-    ax = fig.add_axes((0.10, 0.13, 0.40, 0.72), polar=True, facecolor=SURFACE)
+    fig = plt.figure(figsize=(9.0, 4.4), facecolor=SURFACE)
+    ax = fig.add_axes((0.09, 0.13, 0.36, 0.72), polar=True, facecolor=SURFACE)
 
     # Axes start at the top and run clockwise.
     ax.set_theta_offset(math.pi / 2)
@@ -48,14 +67,12 @@ def comparison_figure(a: dict, b: dict, normalized: bool = False) -> Figure:
     ax.set_yticklabels(["", "0.5", "", "1.0"])
     ax.tick_params(axis="y", labelcolor=TEXT_SECONDARY, labelsize=7)
     ax.set_rlabel_position(180 / len(COMPONENTS))  # between the first two axes
+
     ax.set_xticks(angles)
-    ax.set_xticklabels(
-        [f"{LABELS[c]}\n{a['components'][c]:.2f} / {b['components'][c]:.2f}" for c in COMPONENTS],
-        color=TEXT, fontsize=8.5)
-    ax.tick_params(axis="x", pad=8)
-    for label, angle in zip(ax.get_xticklabels(), angles):
-        side = math.sin(angle)
-        label.set_horizontalalignment("left" if side > 0.1 else "right" if side < -0.1 else "center")
+    ax.set_xticklabels([])  # replaced by the color-coded labels below
+    for c, angle in zip(COMPONENTS, angles):
+        _axis_label(ax, angle, LABELS[c], a["components"][c], b["components"][c])
+
     ax.grid(color=GRID, linewidth=0.8)
     ax.spines["polar"].set_color(GRID)
 
@@ -69,12 +86,13 @@ def comparison_figure(a: dict, b: dict, normalized: bool = False) -> Figure:
                 color=color, markeredgecolor=SURFACE, markeredgewidth=1.5)
 
     # Legend: which run is which
-    x_name, x_a, x_b = 0.60, 0.86, 0.96
+    x_name, x_a, x_b = 0.64, 0.87, 0.96
     for k, (result, (name, color, style)) in enumerate(zip(results, SERIES)):
         y = 0.84 - 0.10 * k
         fig.add_artist(Line2D([x_name, x_name + 0.035], [y + 0.012, y + 0.012], color=color,
                               linewidth=2, linestyle=style, transform=fig.transFigure))
-        fig.text(x_name + 0.05, y, f"{name}  Run {result.get('id') or '?'}",
+        fig.text(x_name + 0.05, y, name, color=SERIES_TEXT[name], fontsize=10, fontweight="bold")
+        fig.text(x_name + 0.075, y, f"Run {result.get('id') or '?'}",
                  color=TEXT, fontsize=10, fontweight="bold")
         if result.get("archetype"):
             fig.text(x_name + 0.05, y - 0.045, f"Archetype {result['archetype']}",
@@ -87,14 +105,11 @@ def comparison_figure(a: dict, b: dict, normalized: bool = False) -> Figure:
     for k, (key, label) in enumerate(SCORE_LABELS):
         y = 0.48 - 0.075 * k
         fig.text(x_name, y, label, color=TEXT, fontsize=10)
-        fig.text(x_a, y, f"{a['scores'][key]:.3f}", color=TEXT, fontsize=10,
+        fig.text(x_a, y, f"{a['scores'][key]:.3f}", color=SERIES_TEXT["A"], fontsize=10,
                  ha="right", family="monospace")
-        fig.text(x_b, y, f"{b['scores'][key]:.3f}", color=TEXT, fontsize=10,
+        fig.text(x_b, y, f"{b['scores'][key]:.3f}", color=SERIES_TEXT["B"], fontsize=10,
                  ha="right", family="monospace")
 
-    note = ("Each profile normalized by its own strongest\ncomponent; labels show raw values (A / B)."
-            if normalized else "Raw component values; labels show A / B.")
-    fig.text(x_name, 0.14, note, color=TEXT_SECONDARY, fontsize=7.5)
     return fig
 
 
