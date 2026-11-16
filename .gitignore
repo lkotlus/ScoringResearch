@@ -220,3 +220,5 @@ __marimo__/
 # Mirrored files
 mirror/
 mirror/*
+
+runs.json

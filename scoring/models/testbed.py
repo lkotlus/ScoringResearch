@@ -22,6 +22,7 @@ class Finding:
     depth: int
     impact: float
     alpha_max: float
+    requires: list[list[str]] = field(default_factory=list)
 
 
 @dataclass
@@ -56,6 +57,7 @@ class Testbed:
                 depth=depth,
                 impact=impact,
                 alpha_max=impact * (depth + 1),
+                requires=[list(alt) for alt in d.get("requires", [])]
             )
 
         self.rules: dict[str, Rule] = {

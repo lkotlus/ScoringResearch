@@ -17,6 +17,7 @@ import sys
 TOOLS = {
     "--scoring": ("scoring.cli.score", "score a file of runs with all three models"),
     "--edge-cases": ("scoring.cli.edge_cases", "check the edge-case pairs against all three models"),
+    "--generate": ("scoring.cli.generate", "generate synthetic runs for the 32 archetypes"),
 }
 
 
