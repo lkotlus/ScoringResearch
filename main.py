@@ -2,8 +2,7 @@
 CLI to actually use the damn tools.
 
 Usage:
-    python3 main.py runs.json -o scores.json
-    python3 main.py --selftest
+    python3 main.py --[THING] --[THING_OPTIONS]
 """
 
 import argparse
