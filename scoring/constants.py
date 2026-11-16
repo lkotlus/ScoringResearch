@@ -7,6 +7,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent.parent
 DEFAULT_FINDINGS = HERE / "config" / "tb0_finding_set.json"
 DEFAULT_ROE = HERE / "config" / "tb0_roe.json"
+DEFAULT_PREFERENCES = HERE / "config" / "preferences.json"
 
 COMPONENTS = ("cov", "und", "pi", "T", "C")
 CIA = {"H": 0.56, "L": 0.22, "N": 0.0}

@@ -1,0 +1,13 @@
+{
+    "preferences": [
+        {"name": "Coverage over time efficiency",      "better": "H==L=", "worse": "L==H="},
+        {"name": "Coverage over cost efficiency",      "better": "H===L", "worse": "L===H"},
+        {"name": "Understanding over coverage",        "better": "LH===", "worse": "HL==="},
+        {"name": "Understanding over time efficiency", "better": "=H=L=", "worse": "=L=H="},
+        {"name": "Understanding over cost efficiency", "better": "=H==L", "worse": "=L==H"},
+        {"name": "Integrity over coverage",            "better": "L=H==", "worse": "H=L=="},
+        {"name": "Integrity over time efficiency",     "better": "==HL=", "worse": "==LH="},
+        {"name": "Integrity over cost efficiency",     "better": "==H=L", "worse": "==L=H"},
+        {"name": "Coverage and understanding over efficiency", "better": "HH=LL", "worse": "LL=HH"}
+    ]
+}
